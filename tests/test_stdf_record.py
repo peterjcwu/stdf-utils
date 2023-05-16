@@ -1,7 +1,6 @@
 import os
 from unittest import TestCase
-from stdf.util import OpenFile
-from stdf.stdf_record import StdfRecord
+from stdf_utils import OpenFile, StdfRecord
 
 
 class TestStdfRecord(TestCase):

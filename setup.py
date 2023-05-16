@@ -1,5 +1,5 @@
 
-NAME = 'stdf'
+NAME = 'stdf-utils'
 VERSION = '0.1.0'
 DESCRIPTION = 'stdf file parser and emitter'
 LONG_DESCRIPTION = """\
@@ -10,8 +10,6 @@ AUTHOR = "Peter JC. Wu"
 AUTHOR_EMAIL = "wolf952@gmail.com"
 LICENSE = "MIT"
 PLATFORMS = "any"
-URL = "https://pyyaml.org/"
-DOWNLOAD_URL = "https://pypi.org/project/PyYAML/"
 CLASSIFIERS = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
@@ -33,7 +31,7 @@ CLASSIFIERS = [
 ]
 
 PROJECT_URLS = {
-   'Source Code': 'https://github.com/peterjcwu/stdf',
+   'Source Code': 'https://github.com/peterjcwu/stdf-utils',
 }
 
 dependencies = [
@@ -51,8 +49,6 @@ if __name__ == '__main__':
         author_email=AUTHOR_EMAIL,
         license=LICENSE,
         platforms=PLATFORMS,
-        url=URL,
-        download_url=DOWNLOAD_URL,
         classifiers=CLASSIFIERS,
         project_urls=PROJECT_URLS,
         python_requires='>=3.6',

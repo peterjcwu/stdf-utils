@@ -2,7 +2,7 @@ import logging
 import math
 import sys
 from typing import Dict, Tuple, Any
-from stdf.util import unp
+from .util import unp
 
 
 class StdfRecord:

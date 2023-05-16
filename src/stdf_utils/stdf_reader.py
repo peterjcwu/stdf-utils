@@ -1,8 +1,8 @@
 import csv
 import statistics
 from collections import defaultdict
-from stdf.stdf_record import StdfRecord
-from stdf.util import OpenFile
+from .stdf_record import StdfRecord
+from .util import OpenFile
 
 
 class StdfReader:
@@ -10,7 +10,6 @@ class StdfReader:
         self.ptr_container = PTRContainer()
         self.handlers = {
             "Ptr": self.ptr_handler,
-            "Wrr": self.wrr_handler
         }
         with OpenFile(file_path) as f_in:
             for rec_type, rec in StdfRecord(f_in, set(self.handlers.keys())):
@@ -18,9 +17,6 @@ class StdfReader:
 
     def ptr_handler(self, rec: dict):
         self.ptr_container.push(rec)
-
-    def wrr_handler(self, rec: dict):
-        print(rec)
 
     def export_csv(self, fp: str):
         fieldnames = ["Test ID", "Site", "Name", "Execs", "Fails", "Low Lim", "High Lim", "Min", "Max", "Mean"]
