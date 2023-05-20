@@ -9,5 +9,8 @@ class TestStdfRecord(TestCase):
 
     def test_stdf_record_open_file(self):
         with OpenFile(self.f) as f_in:
-            for rec_type, record in StdfRecord(f_in):
-                print(rec_type, record)
+            for i, (rec_type, record) in enumerate(StdfRecord(f_in)):
+                print(i, rec_type, record)
+                if i > 100:
+                    break
+

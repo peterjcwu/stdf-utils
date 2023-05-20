@@ -12,16 +12,17 @@ class StdfRecord:
         self.parse_types: set = parse_types or {r["name"] for r in self.record_table.values()}
         self.endian = "@"
         # cache
-        self._rec_type: str = ""
+        self.buffer: bytes = b''
+        self.rec_type: str = ""
         self._rec_fields: Tuple[Tuple[str, str]] = tuple()
         self._data: Dict[str, Any] = {}
 
     def __iter__(self):
         while True:
             try:
-                record = self._get_next_record()
+                record = self.get_next_record()
                 if record is not None:
-                    yield self._rec_type, record
+                    yield self.rec_type, record
 
             except EOFError:
                 logging.debug("Completed...")
@@ -31,13 +32,12 @@ class StdfRecord:
                 logging.error("Incomplete log...")
                 break
 
-    def _get_next_record(self):
+    def get_next_record(self):
         if self.endian == "@":
-            self.far_handler()
-            return None  # do not return Far
+            return self.far_handler()
 
         # reset
-        self._rec_type = ""
+        self.rec_type = ""
         self._rec_fields = tuple()
         self._data = {}
 
@@ -50,19 +50,23 @@ class StdfRecord:
             raise BufferError
 
         body = self.fp.read(unp(self.endian, 'H', header[0:2]))
+        self.buffer = header + body
         key: int = header[2] * 1000 + header[3]  # typ * 1000 + sub
-        record = self.record_table.get(key)
-        if record is None:
+        if key not in self.record_table:
             logging.error(f"Unknown key: {key}")
             return None
 
         # parse type filter
-        self._rec_type = record["name"]
+        record = self.record_table[key]
+        self.rec_type = record["name"]
         if record["name"] in self.parse_types:
             return self.parse(record, body)
 
     def far_handler(self):
-        buf = self.fp.read(6)
+        self.rec_type = "Far"
+        self.buffer = self.fp.read(6)
+
+        buf = self.buffer
         cpu_type = buf[4]
         if cpu_type == 1:
             self.endian = ">"
@@ -70,6 +74,9 @@ class StdfRecord:
             self.endian = "<"
         else:
             raise ValueError(f"Cpu type '{cpu_type}' is not supported...")
+
+        return self.parse(self.record_table[10], buf[4:]) \
+            if "Far" in self.parse_types else None
 
     def parse(self, record, body):
         self._rec_fields = record["fields"]
