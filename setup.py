@@ -1,6 +1,6 @@
 
 NAME = 'stdf-utils'
-VERSION = '0.2.0'
+VERSION = '0.2.1'
 DESCRIPTION = 'stdf file parser and emitter'
 LONG_DESCRIPTION = """\
 stdf is the standard format of ATE result, and this pacakge supports
