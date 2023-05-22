@@ -5,16 +5,21 @@ from .stdf_record import StdfRecord
 from .util import OpenFile
 
 
-class StdfPerTD:
-    def __init__(self, stdf_path: str, ptr_filter=None, ptr_extra_fields=None):
+class StdfPerPart:
+    def __init__(self,
+                 stdf_path: str,
+                 ptr_filter=None,
+                 ptr_extra_fields=None,
+                 extra_handler=None):
         self.stdf_path = stdf_path
-        self.ptr_filter = ptr_filter or (lambda x: True)
-        self.ptr_extra_fields = ptr_extra_fields or (lambda x: {})
+        self.ptr_filter = ptr_filter or (lambda d: True)
+        self.ptr_extra_fields = ptr_extra_fields or (lambda d: {})
         self.previous_rec: dict = {}
         self.handlers = {
             "Mir": self.mir_handler,
             "Ptr": self.ptr_handler,
             "Prr": self.prr_handler,
+            **(extra_handler or {}),
         }
         # cache
         self.mir = {}

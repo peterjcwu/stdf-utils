@@ -1,6 +1,6 @@
 import os
 from unittest import TestCase
-from stdf_utils import StdfPerTD, OpenFile
+from stdf_utils import StdfPerPart, OpenFile
 
 
 class TestStdfPerTd(TestCase):
@@ -8,7 +8,11 @@ class TestStdfPerTd(TestCase):
         self.f = os.path.abspath(os.path.join(__file__, os.pardir, "data", "lot2.stdf.gz"))
 
     def test_stdf_per_td(self):
-        for i, td in enumerate(StdfPerTD(self.f)):
+        for td in StdfPerPart(self.f, extra_handler={"Mrr": self.mrr_handler}):
             assert "mir" in td.keys()
             assert "prr" in td.keys()
             assert "ptr" in td.keys()
+
+    @staticmethod
+    def mrr_handler(d):
+        print(d)
