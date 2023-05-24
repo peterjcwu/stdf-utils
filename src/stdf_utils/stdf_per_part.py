@@ -1,16 +1,15 @@
 import os.path
 from collections import defaultdict
+from datetime import datetime
 from copy import copy
 from .stdf_record import StdfRecord
 from .util import OpenFile
 
 
 class StdfPerPart:
-    def __init__(self,
-                 stdf_path: str,
-                 ptr_filter=None,
-                 ptr_extra_fields=None,
-                 extra_handler=None):
+    def __init__(self, stdf_path: str, ptr_filter=None,
+                 ptr_extra_fields=None, extra_handler=None):
+
         self.stdf_path = stdf_path
         self.ptr_filter = ptr_filter or (lambda d: True)
         self.ptr_extra_fields = ptr_extra_fields or (lambda d: {})
@@ -19,6 +18,7 @@ class StdfPerPart:
             "Mir": self.mir_handler,
             "Ptr": self.ptr_handler,
             "Prr": self.prr_handler,
+            "Mrr": self.mrr_handler,
             **(extra_handler or {}),
         }
         # cache
@@ -41,12 +41,19 @@ class StdfPerPart:
                         "prr": copy(self.prr),
                         "ptr": self.ptr.pop(site) if site in self.ptr else [],
                     }
+                elif rec_type == "Mrr":
+                    yield {
+                        "mir": copy(self.mir),
+                        "prr": {},
+                        "ptr": [],
+                    }
 
     def mir_handler(self, d: dict) -> None:
         self.mir = {
             "node": d["NODE_NAM"].decode(),
             "job": d["JOB_NAM"].decode().split("/")[-1].replace(".prog", ""),
-            "name": os.path.basename(self.stdf_path).split(".")[0],
+            "stdf_name": os.path.basename(self.stdf_path).split(".")[0],
+            "start_t": datetime.fromtimestamp(d["START_T"])
         }
 
     def ptr_handler(self, d: dict) -> None:
@@ -71,3 +78,6 @@ class StdfPerPart:
             "sb": d["SOFT_BIN"],
             "hb": d["HARD_BIN"],
         }
+
+    def mrr_handler(self, d: dict) -> None:
+        self.mir["finish_t"] = datetime.fromtimestamp(d["FINISH_T"])
