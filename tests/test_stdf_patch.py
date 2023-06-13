@@ -15,7 +15,7 @@ class TestStdfPatch(TestCase):
     @staticmethod
     def patch_func(rec_type: str, record: dict, buffer: bytes) -> bytes:
         if rec_type == "Dtr":
-            text = record["TEXT_DAT"]
+            text = record["TEXT_DAT"].decode()
             if re.search(r"COND:.*(wmark|alarm)=", text) or re.search("CHARINFO", text):
                 print(text)
                 return b''
