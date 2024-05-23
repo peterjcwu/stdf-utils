@@ -1,8 +1,8 @@
 import csv
 import statistics
 from collections import defaultdict
-from .stdf_record import StdfRecord
-from .util import OpenFile
+from stdf_utils.stdf_record import StdfRecord
+from stdf_utils.util import OpenFile
 
 
 class StdfToCsv:
@@ -66,3 +66,14 @@ class PTRContainer:
         while len(self.data[key]) <= site:
             self.data[key].append([])
         self.data[key][site].append(rec)
+
+
+if __name__ == '__main__':
+    import os
+    for cur_dir, dirs, file_names in os.walk(r"C:\log\w413_yukon_smss_retest_fail_debug\T8X364-09"):
+        for file_name in file_names:
+            if not file_name.endswith(".stdf.gz"):
+                continue
+            file_path = os.path.join(cur_dir, file_name)
+            print(file_path)
+            StdfToCsv(file_path)
