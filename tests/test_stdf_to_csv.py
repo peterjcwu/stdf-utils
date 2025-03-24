@@ -14,6 +14,9 @@ class TestStdfToCsv(TestCase):
         self.assertEqual(self._get_md5(self.expected_csv), self._get_md5(stdf_to_csv.csv_path))
         os.unlink(stdf_to_csv.csv_path)
 
+    def test_to_csv_2(self):
+        StdfToCsv(r"C:\log\w422_rf_r2gate_release\KN5YT_12_Wafer_Map\RF_A2_WLCSP_KN5YT12_KN5YT12-D1_20240611155932.stdf.gz")
+
     @staticmethod
     def _get_md5(f: str):
         return hashlib.md5(open(f, 'rb').read()).hexdigest()

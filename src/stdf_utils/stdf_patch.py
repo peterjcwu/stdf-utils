@@ -1,6 +1,6 @@
 import logging
 from .stdf_record import StdfRecord
-from .util import OpenFile
+from util import OpenFile
 
 
 class StdfPatch:

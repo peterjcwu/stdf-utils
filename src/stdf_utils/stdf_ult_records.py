@@ -5,7 +5,12 @@ from stdf_utils.stdf_record import StdfRecord
 from util import OpenFile
 
 
-class StdfToCsv:
+class StdfUltRecords:
+    """
+    To store the data in the following schema:
+    ULT: Key
+    PTR:
+    """
     def __init__(self, stdf_path: str, csv_path: str = None):
         self.stdf_path = stdf_path
         self.csv_path = csv_path or stdf_path.replace(".gz", "").replace(".stdf", ".csv")

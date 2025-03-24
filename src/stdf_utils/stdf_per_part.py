@@ -3,7 +3,7 @@ from collections import defaultdict
 from datetime import datetime
 from copy import copy
 from .stdf_record import StdfRecord
-from .util import OpenFile
+from util import OpenFile
 
 
 class StdfPerPart:
